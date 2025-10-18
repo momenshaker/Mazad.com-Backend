@@ -1,4 +1,5 @@
 using Mazad.Application.Abstractions.Persistence;
+using Mazad.Domain.Entities.Admin;
 using Mazad.Domain.Entities.Bids;
 using Mazad.Domain.Entities.Catalog;
 using Mazad.Domain.Entities.Cms;
@@ -35,6 +36,7 @@ public class MazadDbContext : IdentityDbContext<ApplicationUser, ApplicationRole
     public DbSet<Menu> Menus => Set<Menu>();
     public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+    public DbSet<AuditLogEntry> AuditLogs => Set<AuditLogEntry>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
