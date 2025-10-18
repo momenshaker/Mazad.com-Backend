@@ -31,6 +31,7 @@ public class GetAdminListingsQueryHandler : IRequestHandler<GetAdminListingsQuer
         var query = _context.Listings
             .AsNoTracking()
             .Include(l => l.Media)
+            .Include(l => l.Category)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.Search))

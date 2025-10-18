@@ -23,6 +23,7 @@ public class GetSellerListingsQueryHandler : IRequestHandler<GetSellerListingsQu
         var query = _context.Listings
             .AsNoTracking()
             .Include(l => l.Media)
+            .Include(l => l.Category)
             .Where(l => l.SellerId == request.SellerId)
             .OrderByDescending(l => l.CreatedAt);
 

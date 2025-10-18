@@ -23,6 +23,7 @@ public class UpdateListingStatusCommandHandler : IRequestHandler<UpdateListingSt
     {
         var listing = await _context.Listings
             .Include(l => l.Media)
+            .Include(l => l.Category)
             .FirstOrDefaultAsync(l => l.Id == request.ListingId, cancellationToken);
 
         if (listing is null)

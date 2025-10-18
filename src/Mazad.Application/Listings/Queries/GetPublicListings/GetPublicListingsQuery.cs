@@ -37,7 +37,9 @@ public class GetPublicListingsQueryHandler : IRequestHandler<GetPublicListingsQu
         IQueryable<Domain.Entities.Listings.Listing> query = _context.Listings
             .AsNoTracking();
 
-        query = query.Include(l => l.Media);
+        query = query
+            .Include(l => l.Media)
+            .Include(l => l.Category);
 
         if (request.Status.HasValue)
         {
