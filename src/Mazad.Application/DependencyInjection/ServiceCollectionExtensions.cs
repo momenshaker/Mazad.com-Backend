@@ -1,6 +1,5 @@
 using FluentValidation;
 using Mazad.Application.Common;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mazad.Application.DependencyInjection;

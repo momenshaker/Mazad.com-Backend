@@ -16,12 +16,12 @@ public static class PublicListingsEndpoints
     {
         var group = routes.MapGroup("/api/v1/listings");
 
-        group.MapGet("/", async ([FromServices] IMediator mediator, [FromQuery] string? q, [FromQuery] Guid? categoryId, [FromQuery] string? type, [FromQuery] string? sort, [FromQuery] int page = 1, [FromQuery] int pageSize = 20) =>
-        {
-            var listingType = Enum.TryParse<Mazad.Domain.Enums.ListingType>(type, true, out var parsed) ? parsed : null;
-            var result = await mediator.Send(new GetPublicListingsQuery(q, categoryId, listingType, sort, page, pageSize));
-            return Results.Ok(result);
-        });
+        //group.MapGet("/", async ([FromServices] IMediator mediator, [FromQuery] string? q, [FromQuery] Guid? categoryId, [FromQuery] string? type, [FromQuery] string? sort, [FromQuery] int page = 1, [FromQuery] int pageSize = 20) =>
+        //{
+        //    var listingType = Enum.TryParse<Mazad.Domain.Enums.ListingType>(type, true, out var parsed) ? parsed : null;
+        //    var result = await mediator.Send(new GetPublicListingsQuery(q, categoryId, listingType, sort, page, pageSize));
+        //    return Results.Ok(result);
+        //});
 
         group.MapGet("/{id:guid}", async ([FromServices] IMediator mediator, Guid id) =>
         {

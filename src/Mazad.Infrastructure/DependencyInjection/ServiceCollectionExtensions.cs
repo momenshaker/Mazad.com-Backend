@@ -50,7 +50,9 @@ public static class ServiceCollectionExtensions
                     .SetTokenEndpointUris("/connect/token")
                     .AllowAuthorizationCodeFlow()
                     .RequireProofKeyForCodeExchange()
-                    .AllowRefreshTokenFlow();
+                    .AllowRefreshTokenFlow()
+                    .AddDevelopmentEncryptionCertificate()
+                    .AddDevelopmentSigningCertificate();
 
                 builder.RegisterScopes(
                     "openid",
@@ -71,23 +73,14 @@ public static class ServiceCollectionExtensions
             .AddValidation(options =>
             {
                 options.UseLocalServer();
-                options.UseAspNetCore();
+
             });
 
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-            })
-            .AddIdentityCookies();
-
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("Scope:mazad.admin", policy => policy.RequireClaim("scope", "mazad.admin"));
-            options.AddPolicy("Scope:mazad.seller", policy => policy.RequireClaim("scope", "mazad.seller"));
-            options.AddPolicy("Scope:mazad.bidder", policy => policy.RequireClaim("scope", "mazad.bidder"));
-            options.AddPolicy("Scope:mazad.cms", policy => policy.RequireClaim("scope", "mazad.cms"));
-        });
+        services.AddAuthorizationBuilder()
+            .AddPolicy("Scope:mazad.admin", policy => policy.RequireClaim("scope", "mazad.admin"))
+            .AddPolicy("Scope:mazad.seller", policy => policy.RequireClaim("scope", "mazad.seller"))
+            .AddPolicy("Scope:mazad.bidder", policy => policy.RequireClaim("scope", "mazad.bidder"))
+            .AddPolicy("Scope:mazad.cms", policy => policy.RequireClaim("scope", "mazad.cms"));
 
         return services;
     }

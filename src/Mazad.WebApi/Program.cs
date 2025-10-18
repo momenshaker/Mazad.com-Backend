@@ -2,7 +2,6 @@ using Mazad.Application.DependencyInjection;
 using Mazad.Infrastructure.DependencyInjection;
 using Mazad.WebApi.Endpoints.Categories;
 using Mazad.WebApi.Endpoints.Listings;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 

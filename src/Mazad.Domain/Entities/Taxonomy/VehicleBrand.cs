@@ -7,5 +7,5 @@ public class VehicleBrand : AuditableEntity
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
 
-    public ICollection<VehicleModel> Models { get; set; } = new List<VehicleModel>();
+    public ICollection<VehicleModel> Models { get; set; } = [];
 }
