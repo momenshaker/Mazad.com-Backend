@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Reviews;
 
+/// <summary>
+/// Provides extension methods for review submission and retrieval endpoints.
+/// </summary>
 public static class ReviewEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for creating and listing reviews.
+    /// </summary>
     public static void MapReviewEndpoints(this IEndpointRouteBuilder routes)
     {
         routes.MapPost("/api/v1/orders/{orderId:guid}/reviews", (Guid orderId, [FromBody] CreateReviewRequest request) =>
@@ -35,11 +41,23 @@ public static class ReviewEndpoints
         });
     }
 
+    /// <summary>
+    /// Request payload for submitting a review.
+    /// </summary>
     public record CreateReviewRequest(int Score, string Comment);
 
+    /// <summary>
+    /// Response payload describing a submitted review.
+    /// </summary>
     public record ReviewResponse(Guid ReviewId, Guid OrderId, int Score, string Comment, DateTimeOffset CreatedAtUtc, string Status);
 
+    /// <summary>
+    /// Summary projection describing a review for list views.
+    /// </summary>
     public record ReviewSummary(Guid ReviewId, Guid ReviewerId, Guid SubjectId, int Score, string Comment, DateTimeOffset CreatedAtUtc);
 
+    /// <summary>
+    /// Response payload containing paginated review summaries.
+    /// </summary>
     public record ReviewListResponse(int Page, int PageSize, IEnumerable<ReviewSummary> Reviews);
 }

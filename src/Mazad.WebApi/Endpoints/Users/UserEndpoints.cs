@@ -9,8 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Users;
 
+/// <summary>
+/// Provides extension methods for user administration endpoints.
+/// </summary>
 public static class UserEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for listing, updating, and moderating user accounts.
+    /// </summary>
     public static RouteGroupBuilder MapUserEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/users");
@@ -59,6 +65,12 @@ public static class UserEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload for updating administrative user details.
+    /// </summary>
     public record UpdateUserRequest(string? FullName, string? PhoneNumber, bool? IsActive, bool? IsDeleted, Mazad.Domain.Enums.KycStatus? KycStatus, bool? TwoFactorEnabled, IReadOnlyCollection<string>? Roles);
+    /// <summary>
+    /// Request payload for updating a user's avatar image.
+    /// </summary>
     public record UpdateAvatarRequest(string AvatarUrl);
 }

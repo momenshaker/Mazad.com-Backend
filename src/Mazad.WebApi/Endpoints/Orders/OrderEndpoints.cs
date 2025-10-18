@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Orders;
 
+/// <summary>
+/// Provides extension methods for order management endpoints.
+/// </summary>
 public static class OrderEndpoints
 {
+    /// <summary>
+    /// Maps endpoints used to view, create, and update orders.
+    /// </summary>
     public static RouteGroupBuilder MapOrderEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/orders")
@@ -66,27 +72,63 @@ public static class OrderEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Summary projection describing an order for list views.
+    /// </summary>
     public record OrderSummary(Guid OrderId, Guid ListingId, Guid CounterpartyId, decimal Total, string Status, DateTimeOffset UpdatedAtUtc);
 
+    /// <summary>
+    /// Response payload containing paginated order summaries.
+    /// </summary>
     public record OrderListResponse(int Page, int PageSize, string Role, IEnumerable<OrderSummary> Orders);
 
+    /// <summary>
+    /// Request payload for creating a new order.
+    /// </summary>
     public record CreateOrderRequest(Guid ListingId, Guid BuyerId, Guid SellerId, decimal Price);
 
+    /// <summary>
+    /// Detailed response payload describing an individual order.
+    /// </summary>
     public record OrderDetails(Guid OrderId, Guid ListingId, Guid BuyerId, Guid SellerId, decimal Price, string Status, DateTimeOffset CreatedAtUtc);
 
+    /// <summary>
+    /// Request payload specifying a new status for an order.
+    /// </summary>
     public record UpdateOrderStatusRequest(string Status);
 
+    /// <summary>
+    /// Response payload confirming an order status update.
+    /// </summary>
     public record OrderStatusResponse(Guid OrderId, string Status, DateTimeOffset UpdatedAtUtc);
 
+    /// <summary>
+    /// Request payload to initiate payment for an order.
+    /// </summary>
     public record PayOrderRequest(Guid PaymentMethodId, decimal Amount);
 
+    /// <summary>
+    /// Response payload describing the outcome of an order payment.
+    /// </summary>
     public record OrderPaymentResponse(Guid OrderId, Guid PaymentMethodId, string Status, DateTimeOffset ProcessedAtUtc);
 
+    /// <summary>
+    /// Request payload to initiate an order refund.
+    /// </summary>
     public record RefundOrderRequest(decimal Amount, string Reason);
 
+    /// <summary>
+    /// Response payload describing the outcome of an order refund.
+    /// </summary>
     public record OrderRefundResponse(Guid OrderId, decimal Amount, string Status, DateTimeOffset ProcessedAtUtc);
 
+    /// <summary>
+    /// Entry describing a notable event in an order's lifecycle.
+    /// </summary>
     public record OrderTimelineEntry(string Status, DateTimeOffset OccurredAtUtc, string Notes);
 
+    /// <summary>
+    /// Response payload containing the chronological order timeline.
+    /// </summary>
     public record OrderTimelineResponse(Guid OrderId, IEnumerable<OrderTimelineEntry> Events);
 }

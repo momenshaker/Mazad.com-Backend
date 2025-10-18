@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Sellers;
 
+/// <summary>
+/// Provides extension methods for seller discovery and management endpoints.
+/// </summary>
 public static class SellerEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for exploring sellers and viewing seller-specific data.
+    /// </summary>
     public static void MapSellerEndpoints(this IEndpointRouteBuilder routes)
     {
         var sellerGroup = routes.MapGroup("/api/v1/sellers");
@@ -78,23 +84,53 @@ public static class SellerEndpoints
         });
     }
 
+    /// <summary>
+    /// Request payload describing pagination when browsing sellers.
+    /// </summary>
     public record SellerDirectoryRequest(int Page = 1, int PageSize = 20);
 
+    /// <summary>
+    /// Response payload containing paginated seller summaries.
+    /// </summary>
     public record SellerDirectoryResponse(int Page, int PageSize, IEnumerable<SellerSummary> Sellers);
 
+    /// <summary>
+    /// Summary projection describing a seller in directory views.
+    /// </summary>
     public record SellerSummary(Guid SellerId, string DisplayName, decimal Rating, int ActiveListings);
 
+    /// <summary>
+    /// Detailed response payload describing a seller profile.
+    /// </summary>
     public record SellerDetails(Guid SellerId, string DisplayName, string Slug, string Location, decimal Rating, int Followers);
 
+    /// <summary>
+    /// Summary projection describing a listing owned by a seller.
+    /// </summary>
     public record SellerListingSummary(Guid ListingId, string Title, string Status, DateTimeOffset EndAtUtc, decimal CurrentPrice);
 
+    /// <summary>
+    /// Response payload containing seller listings with pagination.
+    /// </summary>
     public record SellerListingsResponse(Guid SellerId, int Page, int PageSize, IEnumerable<SellerListingSummary> Listings);
 
+    /// <summary>
+    /// Response payload summarizing seller performance metrics.
+    /// </summary>
     public record SellerStats(Guid SellerId, decimal Rating, int SoldCount, int CompletedOrders, int ActiveListings, int DraftListings);
 
+    /// <summary>
+    /// Response payload describing the authenticated seller's listings by status.
+    /// </summary>
     public record MySellingResponse(IEnumerable<SellerListingSummary> Active, IEnumerable<SellerListingSummary> Drafts, IEnumerable<SellerListingSummary> Completed);
 
+    /// <summary>
+    /// Summary projection describing a seller payout.
+    /// </summary>
     public record PayoutSummary(Guid PayoutId, string Status, decimal Amount, DateTimeOffset ExpectedPayoutDateUtc);
 
+    /// <summary>
+    /// Response payload containing payout summaries for a seller.
+    /// </summary>
     public record SellerPayoutsResponse(IEnumerable<PayoutSummary> Payouts);
 }

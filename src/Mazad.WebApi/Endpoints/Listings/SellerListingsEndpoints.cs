@@ -9,8 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Listings;
 
+/// <summary>
+/// Provides extension methods for seller-facing listing endpoints.
+/// </summary>
 public static class SellerListingsEndpoints
 {
+    /// <summary>
+    /// Maps endpoints that allow sellers to manage their listings.
+    /// </summary>
     public static RouteGroupBuilder MapSellerListingsEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/seller/listings")
@@ -61,5 +67,8 @@ public static class SellerListingsEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload containing a seller's cancellation reason.
+    /// </summary>
     public record CancelListingRequest(string? Reason);
 }

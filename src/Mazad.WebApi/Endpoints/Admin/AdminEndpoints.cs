@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Admin;
 
+/// <summary>
+/// Provides extension methods for administrative dashboard and configuration endpoints.
+/// </summary>
 public static class AdminEndpoints
 {
+    /// <summary>
+    /// Maps administrative endpoints for dashboards, reports, and settings.
+    /// </summary>
     public static RouteGroupBuilder MapAdminEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/admin")
@@ -76,25 +82,58 @@ public static class AdminEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Response payload summarizing headline dashboard metrics.
+    /// </summary>
     public record AdminDashboardResponse(int ActiveAuctions, int PendingListings, decimal GmvThisMonth, int OpenDisputes, int PendingPayouts);
 
+    /// <summary>
+    /// Summary projection describing a listing awaiting moderation.
+    /// </summary>
     public record AdminListingSummary(Guid ListingId, string Title, string Status, DateTimeOffset SubmittedAtUtc);
 
+    /// <summary>
+    /// Response payload containing a paginated collection of admin listing summaries.
+    /// </summary>
     public record AdminListingListResponse(int Page, int PageSize, IEnumerable<AdminListingSummary> Listings);
 
+    /// <summary>
+    /// Request payload submitted when reviewing a listing.
+    /// </summary>
     public record AdminReviewRequest(string? Notes);
 
+    /// <summary>
+    /// Response payload describing the outcome of an admin moderation action.
+    /// </summary>
     public record AdminModerationResponse(Guid ListingId, string Status, string? Notes, DateTimeOffset ProcessedAtUtc);
 
+    /// <summary>
+    /// Response payload summarizing transaction report statistics.
+    /// </summary>
     public record TransactionReportResponse(DateTimeOffset? From, DateTimeOffset? To, int TransactionsCount, decimal TotalVolume);
 
+    /// <summary>
+    /// Response payload summarizing user account trends.
+    /// </summary>
     public record UserReportResponse(DateTimeOffset? From, DateTimeOffset? To, int NewUsers, int SuspendedUsers);
 
+    /// <summary>
+    /// Representation of a single administrative audit log entry.
+    /// </summary>
     public record AuditLogEntry(DateTimeOffset OccurredAtUtc, string Actor, string Area, string Action, string Description);
 
+    /// <summary>
+    /// Response payload containing paginated audit log entries.
+    /// </summary>
     public record AuditLogResponse(int Page, int PageSize, IEnumerable<AuditLogEntry> Entries);
 
+    /// <summary>
+    /// Response payload describing configurable platform settings.
+    /// </summary>
     public record AdminSettingsResponse(decimal PlatformFeePercentage, IEnumerable<decimal> BidIncrements, string AntiSnipingPolicy);
 
+    /// <summary>
+    /// Request payload used to update administrative platform settings.
+    /// </summary>
     public record UpdateAdminSettingsRequest(decimal PlatformFeePercentage, IEnumerable<decimal> BidIncrements, string AntiSnipingPolicy);
 }

@@ -11,8 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Listings;
 
+/// <summary>
+/// Provides extension methods for mapping public listing endpoints exposed to all users.
+/// </summary>
 public static class PublicListingsEndpoints
 {
+    /// <summary>
+    /// Maps the public listings endpoints for browsing listings and managing bids.
+    /// </summary>
     public static RouteGroupBuilder MapPublicListingsEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/listings");
@@ -92,7 +98,16 @@ public static class PublicListingsEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload for placing a bid on a listing.
+    /// </summary>
     public record PlaceBidRequest(decimal Amount);
+    /// <summary>
+    /// Request payload for configuring automatic bidding limits.
+    /// </summary>
     public record SetAutoBidRequest(decimal MaxAmount);
+    /// <summary>
+    /// Response payload that describes an automatic bid configuration.
+    /// </summary>
     public record AutoBidResponse(Guid AutoBidId, decimal MaxAmount, DateTimeOffset CreatedAtUtc);
 }

@@ -12,8 +12,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Listings;
 
+/// <summary>
+/// Provides extension methods for comprehensive listing management endpoints.
+/// </summary>
 public static class ListingManagementEndpoints
 {
+    /// <summary>
+    /// Maps endpoints used to create, update, and administrate listings.
+    /// </summary>
     public static RouteGroupBuilder MapListingManagementEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/listings");
@@ -157,6 +163,9 @@ public static class ListingManagementEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload containing listing details for update operations.
+    /// </summary>
     public record UpdateListingRequest
     {
         public Guid? CategoryId { get; init; }
@@ -173,10 +182,16 @@ public static class ListingManagementEndpoints
         public decimal? BuyNowPrice { get; init; }
     }
 
+    /// <summary>
+    /// Request payload for uploading listing media assets.
+    /// </summary>
     public record UploadListingImagesRequest
     {
         public IReadOnlyCollection<AddListingImageRequest> Images { get; init; } = Array.Empty<AddListingImageRequest>();
     }
 
+    /// <summary>
+    /// Request payload for extending the duration of a listing.
+    /// </summary>
     public record ExtendListingRequest(DateTimeOffset NewEndAt);
 }

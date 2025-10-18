@@ -3,8 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Auctions;
 
+/// <summary>
+/// Provides extension methods for managing auction-related administrative endpoints.
+/// </summary>
 public static class AuctionEndpoints
 {
+    /// <summary>
+    /// Maps administrative auction endpoints for viewing and controlling auctions.
+    /// </summary>
     public static RouteGroupBuilder MapAuctionEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/auctions")
@@ -47,11 +53,23 @@ public static class AuctionEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Summary projection describing an auction for list views.
+    /// </summary>
     public record AuctionSummary(Guid ListingId, Guid AuctionId, DateTimeOffset StartAtUtc, DateTimeOffset EndAtUtc, decimal ReservePrice, decimal BidIncrement, bool HasAntiSniping, string Policy);
 
+    /// <summary>
+    /// Response payload returned when listing auctions.
+    /// </summary>
     public record AuctionListResponse(IEnumerable<AuctionSummary> Auctions);
 
+    /// <summary>
+    /// Detailed projection describing a specific auction configuration.
+    /// </summary>
     public record AuctionDetails(Guid ListingId, DateTimeOffset StartAtUtc, DateTimeOffset EndAtUtc, decimal ReservePrice, decimal BidIncrement, bool AutoExtendEnabled, string AntiSnipingPolicy);
 
+    /// <summary>
+    /// Response payload returned after performing an auction action.
+    /// </summary>
     public record AuctionActionResponse(Guid ListingId, string Action, DateTimeOffset ProcessedAtUtc);
 }
