@@ -192,6 +192,11 @@ public class AuthService : IAuthService
             Errors: Array.Empty<string>());
     }
 
+    public Task LogoutAsync(CancellationToken cancellationToken)
+    {
+        return _signInManager.SignOutAsync();
+    }
+
     private async Task EnsureRoleExistsAsync(string roleName)
     {
         if (await _roleManager.RoleExistsAsync(roleName))

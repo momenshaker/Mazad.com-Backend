@@ -15,4 +15,6 @@ public interface IAuthService
     Task<SetPasswordResultDto> SetPasswordAsync(Guid userId, string newPassword, string? currentPassword, CancellationToken cancellationToken);
 
     Task<EnableAuthenticatorMfaResultDto> EnableAuthenticatorAsync(Guid userId, string? code, CancellationToken cancellationToken);
+
+    Task LogoutAsync(CancellationToken cancellationToken);
 }

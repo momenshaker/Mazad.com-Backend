@@ -1,9 +1,10 @@
 using Mazad.Application.DependencyInjection;
 using Mazad.Infrastructure.DependencyInjection;
-using Mazad.WebApi.Endpoints.Accounts;
 using Mazad.WebApi.Endpoints.Auth;
+using Mazad.WebApi.Endpoints.Bids;
 using Mazad.WebApi.Endpoints.Categories;
 using Mazad.WebApi.Endpoints.Listings;
+using Mazad.WebApi.Endpoints.Watchlists;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,7 @@ app.MapAdminListingsEndpoints();
 app.MapPublicCategoriesEndpoints();
 app.MapAdminCategoriesEndpoints();
 app.MapAuthEndpoints();
-app.MapAccountEndpoints();
+app.MapBidEndpoints();
+app.MapWatchlistEndpoints();
 
 app.Run();
