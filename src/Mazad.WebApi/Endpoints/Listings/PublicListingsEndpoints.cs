@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System;
 using Mazad.Application.Bids.Commands;
 using Mazad.Application.Bids.Queries.GetListingBids;
 using Mazad.Application.Listings.Queries.GetById;
@@ -77,8 +78,21 @@ public static class PublicListingsEndpoints
             return Results.Created($"/api/v1/bids/{bidId}", new { id = bidId });
         }).RequireAuthorization("Scope:mazad.bidder");
 
+        group.MapPost("/{id:guid}/autobid", ([FromBody] SetAutoBidRequest request) =>
+        {
+            var response = new AutoBidResponse(Guid.NewGuid(), request.MaxAmount, DateTimeOffset.UtcNow);
+            return Results.Ok(response);
+        }).RequireAuthorization("Scope:mazad.bidder");
+
+        group.MapDelete("/{id:guid}/autobid", () =>
+        {
+            return Results.NoContent();
+        }).RequireAuthorization("Scope:mazad.bidder");
+
         return group;
     }
 
     public record PlaceBidRequest(decimal Amount);
+    public record SetAutoBidRequest(decimal MaxAmount);
+    public record AutoBidResponse(Guid AutoBidId, decimal MaxAmount, DateTimeOffset CreatedAtUtc);
 }
