@@ -10,8 +10,9 @@ public static class FeeEndpoints
         var group = routes.MapGroup("/api/v1/fees")
             .RequireAuthorization("Scope:mazad.api");
 
-        group.MapGet("/estimate", ([FromQuery] FeeEstimateRequest request) =>
+        group.MapGet("/estimate", ([FromQuery] Guid listingId, [FromQuery] decimal amount) =>
         {
+            var request = new FeeEstimateRequest(listingId, amount);
             var estimate = new FeeEstimateResponse(request.ListingId, request.Amount, Math.Round(request.Amount * 0.07m, 2), "standard");
             return Results.Ok(estimate);
         });

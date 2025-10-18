@@ -1,3 +1,4 @@
+using Mazad.Domain.Entities.Admin;
 using Mazad.Domain.Entities.Bids;
 using Mazad.Domain.Entities.Catalog;
 using Mazad.Domain.Entities.Cms;
@@ -27,6 +28,7 @@ public interface IMazadDbContext
     DbSet<Menu> Menus { get; }
     DbSet<MediaAsset> MediaAssets { get; }
     DbSet<UserProfile> UserProfiles { get; }
+    DbSet<AuditLogEntry> AuditLogs { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
