@@ -1,3 +1,4 @@
+using Mazad.Application.Abstractions.Identity;
 using Mazad.Application.Abstractions.Persistence;
 using Mazad.Infrastructure.Identity;
 using Mazad.Infrastructure.Persistence;
@@ -38,6 +39,8 @@ public static class ServiceCollectionExtensions
             .AddEntityFrameworkStores<MazadDbContext>()
             .AddDefaultTokenProviders();
 
+        services.AddScoped<IUserAccountService, UserAccountService>();
+
         services.AddOpenIddict()
             .AddCore(builder =>
             {
@@ -77,6 +80,7 @@ public static class ServiceCollectionExtensions
             });
 
         services.AddAuthorizationBuilder()
+            .AddPolicy("Scope:mazad.api", policy => policy.RequireClaim("scope", "mazad.api"))
             .AddPolicy("Scope:mazad.admin", policy => policy.RequireClaim("scope", "mazad.admin"))
             .AddPolicy("Scope:mazad.seller", policy => policy.RequireClaim("scope", "mazad.seller"))
             .AddPolicy("Scope:mazad.bidder", policy => policy.RequireClaim("scope", "mazad.bidder"))
