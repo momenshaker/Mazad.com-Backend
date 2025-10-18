@@ -8,7 +8,7 @@ namespace Mazad.Application.Listings.Commands.Media;
 
 public record RemoveListingImageCommand(Guid ListingId, Guid ImageId, Guid ActorId, bool IsAdmin) : IRequest;
 
-public class RemoveListingImageCommandHandler : IRequestHandler<RemoveListingImageCommand>
+public class RemoveListingImageCommandHandler : IRequestHandler<RemoveListingImageCommand, Unit>
 {
     private readonly IMazadDbContext _context;
 

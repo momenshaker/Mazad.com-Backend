@@ -6,7 +6,7 @@ namespace Mazad.Application.Users.Commands;
 
 public record DeleteUserCommand(Guid UserId) : IRequest;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
     private readonly IIdentityAdminService _identityAdminService;
 

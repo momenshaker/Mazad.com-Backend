@@ -5,7 +5,7 @@ namespace Mazad.Application.Users.Commands;
 
 public record CreateRoleCommand(string RoleName) : IRequest;
 
-public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand>
+public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Unit>
 {
     private readonly IIdentityAdminService _identityAdminService;
 

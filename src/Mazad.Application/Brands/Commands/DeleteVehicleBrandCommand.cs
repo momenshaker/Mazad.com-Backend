@@ -8,7 +8,7 @@ namespace Mazad.Application.Brands.Commands;
 
 public record DeleteVehicleBrandCommand(Guid Id) : IRequest;
 
-public class DeleteVehicleBrandCommandHandler : IRequestHandler<DeleteVehicleBrandCommand>
+public class DeleteVehicleBrandCommandHandler : IRequestHandler<DeleteVehicleBrandCommand, Unit>
 {
     private readonly IMazadDbContext _context;
 
