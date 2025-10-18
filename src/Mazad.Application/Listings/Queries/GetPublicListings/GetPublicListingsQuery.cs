@@ -15,6 +15,7 @@ public record GetPublicListingsQuery(
     ListingType? Type,
     ListingStatus? Status,
     Guid? SellerId,
+    Guid? BrandId,
     decimal? PriceMin,
     decimal? PriceMax,
     bool EndingSoonOnly,
@@ -66,6 +67,12 @@ public class GetPublicListingsQueryHandler : IRequestHandler<GetPublicListingsQu
         if (request.SellerId.HasValue)
         {
             query = query.Where(l => l.SellerId == request.SellerId.Value);
+        }
+
+        if (request.BrandId.HasValue)
+        {
+            var brandText = request.BrandId.Value.ToString();
+            query = query.Where(l => l.Attributes != null && EF.Functions.Like(l.Attributes, $"%{brandText}%"));
         }
 
         if (request.PriceMin.HasValue)

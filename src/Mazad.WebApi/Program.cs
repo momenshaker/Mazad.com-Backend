@@ -3,7 +3,10 @@ using Mazad.Infrastructure.DependencyInjection;
 using Mazad.WebApi.Endpoints.Auth;
 using Mazad.WebApi.Endpoints.Bids;
 using Mazad.WebApi.Endpoints.Categories;
+using Mazad.WebApi.Endpoints.Attributes;
+using Mazad.WebApi.Endpoints.Brands;
 using Mazad.WebApi.Endpoints.Listings;
+using Mazad.WebApi.Endpoints.Users;
 using Mazad.WebApi.Endpoints.Watchlists;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,10 +47,15 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 app.MapPublicListingsEndpoints();
 app.MapSellerListingsEndpoints();
 app.MapAdminListingsEndpoints();
+app.MapListingManagementEndpoints();
 app.MapPublicCategoriesEndpoints();
 app.MapAdminCategoriesEndpoints();
+app.MapBrandEndpoints();
+app.MapAttributeEndpoints();
 app.MapAuthEndpoints();
 app.MapBidEndpoints();
 app.MapWatchlistEndpoints();
+app.MapUserEndpoints();
+app.MapRoleEndpoints();
 
 app.Run();
