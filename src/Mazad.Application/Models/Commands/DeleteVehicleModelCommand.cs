@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mazad.Application.Models.Commands;
 
-public record DeleteVehicleModelCommand(Guid Id) : IRequest;
+public record DeleteVehicleModelCommand(Guid Id) : IRequest<Unit>;
 
 public class DeleteVehicleModelCommandHandler : IRequestHandler<DeleteVehicleModelCommand, Unit>
 {

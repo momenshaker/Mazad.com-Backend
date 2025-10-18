@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mazad.Application.Listings.Commands.Media;
 
-public record RemoveListingImageCommand(Guid ListingId, Guid ImageId, Guid ActorId, bool IsAdmin) : IRequest;
+public record RemoveListingImageCommand(Guid ListingId, Guid ImageId, Guid ActorId, bool IsAdmin) : IRequest<Unit>;
 
 public class RemoveListingImageCommandHandler : IRequestHandler<RemoveListingImageCommand, Unit>
 {

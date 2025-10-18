@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Mazad.Application.Users.Commands;
 
-public record DeleteUserCommand(Guid UserId) : IRequest;
+public record DeleteUserCommand(Guid UserId) : IRequest<Unit>;
 
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
