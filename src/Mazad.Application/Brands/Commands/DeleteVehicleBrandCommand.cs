@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mazad.Application.Brands.Commands;
 
-public record DeleteVehicleBrandCommand(Guid Id) : IRequest;
+public record DeleteVehicleBrandCommand(Guid Id) : IRequest<Unit>;
 
 public class DeleteVehicleBrandCommandHandler : IRequestHandler<DeleteVehicleBrandCommand, Unit>
 {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mazad.Application.Listings.Commands.Delete;
 
-public record DeleteListingCommand(Guid ListingId, Guid ActorId, bool IsAdmin) : IRequest;
+public record DeleteListingCommand(Guid ListingId, Guid ActorId, bool IsAdmin) : IRequest<Unit>;
 
 public class DeleteListingCommandHandler : IRequestHandler<DeleteListingCommand, Unit>
 {

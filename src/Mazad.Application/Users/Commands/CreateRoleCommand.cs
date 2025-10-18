@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Mazad.Application.Users.Commands;
 
-public record CreateRoleCommand(string RoleName) : IRequest;
+public record CreateRoleCommand(string RoleName) : IRequest<Unit>;
 
 public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Unit>
 {

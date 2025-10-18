@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mazad.Application.Attributes.Commands;
 
-public record DeleteAttributeDefinitionCommand(Guid Id) : IRequest;
+public record DeleteAttributeDefinitionCommand(Guid Id) : IRequest<Unit>;
 
 public class DeleteAttributeDefinitionCommandHandler : IRequestHandler<DeleteAttributeDefinitionCommand, Unit>
 {

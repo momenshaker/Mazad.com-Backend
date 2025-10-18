@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Mazad.Application.Users.Commands;
 
-public record DeleteRoleCommand(string RoleName) : IRequest;
+public record DeleteRoleCommand(string RoleName) : IRequest<Unit>;
 
 public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, Unit>
 {

@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Mazad.Application.Auth.Commands;
 
-public record LogoutUserCommand() : IRequest;
+public record LogoutUserCommand() : IRequest<Unit>;
 
-public class LogoutUserCommandHandler(IAuthService authService) : IRequestHandler<LogoutUserCommand>
+public class LogoutUserCommandHandler(IAuthService authService) : IRequestHandler<LogoutUserCommand, Unit>
 {
     private readonly IAuthService _authService = authService;
 
@@ -13,10 +13,5 @@ public class LogoutUserCommandHandler(IAuthService authService) : IRequestHandle
     {
         await _authService.LogoutAsync(cancellationToken);
         return Unit.Value;
-    }
-
-    Task IRequestHandler<LogoutUserCommand>.Handle(LogoutUserCommand request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 }
