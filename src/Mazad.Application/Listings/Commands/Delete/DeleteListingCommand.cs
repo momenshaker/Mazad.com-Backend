@@ -7,7 +7,7 @@ namespace Mazad.Application.Listings.Commands.Delete;
 
 public record DeleteListingCommand(Guid ListingId, Guid ActorId, bool IsAdmin) : IRequest;
 
-public class DeleteListingCommandHandler : IRequestHandler<DeleteListingCommand>
+public class DeleteListingCommandHandler : IRequestHandler<DeleteListingCommand, Unit>
 {
     private readonly IMazadDbContext _context;
 

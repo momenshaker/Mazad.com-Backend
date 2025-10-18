@@ -62,7 +62,7 @@ public class IdentityAdminService : IIdentityAdminService
         var items = new List<UserSummaryDto>(users.Count);
         foreach (var user in users)
         {
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = (await _userManager.GetRolesAsync(user)).ToArray();
             items.Add(new UserSummaryDto(
                 user.Id,
                 user.Email,
@@ -88,7 +88,7 @@ public class IdentityAdminService : IIdentityAdminService
             throw new NotFoundException("User", userId);
         }
 
-        var roles = await _userManager.GetRolesAsync(user);
+        var roles = (await _userManager.GetRolesAsync(user)).ToArray();
         var profile = user.Profile is null
             ? null
             : new UserProfileDto(

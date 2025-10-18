@@ -5,7 +5,7 @@ namespace Mazad.Application.Users.Commands;
 
 public record DeleteRoleCommand(string RoleName) : IRequest;
 
-public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand>
+public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, Unit>
 {
     private readonly IIdentityAdminService _identityAdminService;
 

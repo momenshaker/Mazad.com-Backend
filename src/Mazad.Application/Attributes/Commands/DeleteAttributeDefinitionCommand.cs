@@ -8,7 +8,7 @@ namespace Mazad.Application.Attributes.Commands;
 
 public record DeleteAttributeDefinitionCommand(Guid Id) : IRequest;
 
-public class DeleteAttributeDefinitionCommandHandler : IRequestHandler<DeleteAttributeDefinitionCommand>
+public class DeleteAttributeDefinitionCommandHandler : IRequestHandler<DeleteAttributeDefinitionCommand, Unit>
 {
     private readonly IMazadDbContext _context;
 

@@ -9,7 +9,7 @@ namespace Mazad.Application.Models.Commands;
 
 public record DeleteVehicleModelCommand(Guid Id) : IRequest;
 
-public class DeleteVehicleModelCommandHandler : IRequestHandler<DeleteVehicleModelCommand>
+public class DeleteVehicleModelCommandHandler : IRequestHandler<DeleteVehicleModelCommand, Unit>
 {
     private readonly IMazadDbContext _context;
 
