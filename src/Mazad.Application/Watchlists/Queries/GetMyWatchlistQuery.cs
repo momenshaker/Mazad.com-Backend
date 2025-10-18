@@ -24,7 +24,9 @@ public class GetMyWatchlistQueryHandler : IRequestHandler<GetMyWatchlistQuery, P
             .AsNoTracking()
             .Where(w => w.UserId == request.UserId)
             .Join(
-                _context.Listings.Include(l => l.Media),
+                _context.Listings
+                    .Include(l => l.Media)
+                    .Include(l => l.Category),
                 w => w.ListingId,
                 l => l.Id,
                 (w, l) => l)

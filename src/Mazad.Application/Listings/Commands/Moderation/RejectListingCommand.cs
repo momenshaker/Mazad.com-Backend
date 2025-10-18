@@ -23,6 +23,7 @@ public class RejectListingCommandHandler : IRequestHandler<RejectListingCommand,
     {
         var listing = await _context.Listings
             .Include(l => l.Media)
+            .Include(l => l.Category)
             .FirstOrDefaultAsync(l => l.Id == request.ListingId, cancellationToken);
 
         if (listing is null)
@@ -39,6 +40,17 @@ public class RejectListingCommandHandler : IRequestHandler<RejectListingCommand,
         listing.RejectionReason = request.Reason;
         listing.UpdatedAt = DateTimeOffset.UtcNow;
         listing.UpdatedById = request.AdminId;
+
+        _context.AuditLogs.Add(new Mazad.Domain.Entities.Admin.AuditLogEntry
+        {
+            Id = Guid.NewGuid(),
+            Actor = request.AdminId.ToString(),
+            Area = "Listings",
+            Action = "Reject",
+            Description = $"Listing {listing.Id} rejected: {request.Reason}",
+            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedById = request.AdminId
+        });
 
         await _context.SaveChangesAsync(cancellationToken);
 

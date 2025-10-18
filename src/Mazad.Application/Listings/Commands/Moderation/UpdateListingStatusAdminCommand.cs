@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mazad.Application.Listings.Commands.Moderation;
 
-public record ApproveListingCommand(Guid ListingId, Guid AdminId, string? Notes = null) : IRequest<ListingDto>;
+public record UpdateListingStatusAdminCommand(Guid ListingId, ListingStatus TargetStatus, Guid AdminId, string? Notes = null) : IRequest<ListingDto>;
 
-public class ApproveListingCommandHandler : IRequestHandler<ApproveListingCommand, ListingDto>
+public class UpdateListingStatusAdminCommandHandler : IRequestHandler<UpdateListingStatusAdminCommand, ListingDto>
 {
     private readonly IMazadDbContext _context;
 
-    public ApproveListingCommandHandler(IMazadDbContext context)
+    public UpdateListingStatusAdminCommandHandler(IMazadDbContext context)
     {
         _context = context;
     }
 
-    public async Task<ListingDto> Handle(ApproveListingCommand request, CancellationToken cancellationToken)
+    public async Task<ListingDto> Handle(UpdateListingStatusAdminCommand request, CancellationToken cancellationToken)
     {
         var listing = await _context.Listings
             .Include(l => l.Media)
@@ -31,16 +31,13 @@ public class ApproveListingCommandHandler : IRequestHandler<ApproveListingComman
             throw new NotFoundException("Listing", request.ListingId);
         }
 
-        if (listing.Status != ListingStatus.PendingReview)
+        if (request.TargetStatus is not (ListingStatus.Cancelled or ListingStatus.Sold or ListingStatus.Expired))
         {
-            throw new BusinessRuleException("Only listings pending review can be approved.");
+            throw new BusinessRuleException("Only finalization statuses can be set via this endpoint.");
         }
 
-        listing.Status = listing.StartAt.HasValue && listing.StartAt > DateTimeOffset.UtcNow
-            ? ListingStatus.Approved
-            : ListingStatus.Active;
+        listing.Status = request.TargetStatus;
         listing.ModerationNotes = request.Notes;
-        listing.RejectionReason = null;
         listing.UpdatedAt = DateTimeOffset.UtcNow;
         listing.UpdatedById = request.AdminId;
 
@@ -48,15 +45,14 @@ public class ApproveListingCommandHandler : IRequestHandler<ApproveListingComman
         {
             Id = Guid.NewGuid(),
             Actor = request.AdminId.ToString(),
-            Area = "Listings",
-            Action = "Approve",
-            Description = $"Listing {listing.Id} approved",
+            Area = "Auctions",
+            Action = request.TargetStatus.ToString(),
+            Description = $"Listing {listing.Id} status set to {request.TargetStatus}",
             CreatedAt = DateTimeOffset.UtcNow,
             CreatedById = request.AdminId
         });
 
         await _context.SaveChangesAsync(cancellationToken);
-
         return listing.ToDto();
     }
 }

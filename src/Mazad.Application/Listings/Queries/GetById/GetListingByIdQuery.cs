@@ -23,6 +23,7 @@ public class GetListingByIdQueryHandler : IRequestHandler<GetListingByIdQuery, L
         var listing = await _context.Listings
             .AsNoTracking()
             .Include(l => l.Media)
+            .Include(l => l.Category)
             .FirstOrDefaultAsync(l => l.Id == request.Id, cancellationToken);
 
         if (listing is null)
