@@ -40,6 +40,7 @@ public static class ServiceCollectionExtensions
             .AddDefaultTokenProviders();
 
         services.AddScoped<IUserAccountService, UserAccountService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         services.AddOpenIddict()
             .AddCore(builder =>
