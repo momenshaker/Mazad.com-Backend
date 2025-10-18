@@ -23,7 +23,7 @@ public static class AdminEndpoints
             return Results.Ok(metrics);
         });
 
-        group.MapGet("/listings", ([FromQuery] string? status, [FromQuery] int page, [FromQuery] int pageSize) =>
+        group.MapGet("/dashboard/listings", ([FromQuery] string? status, [FromQuery] int page, [FromQuery] int pageSize) =>
         {
             var listings = new[]
             {
