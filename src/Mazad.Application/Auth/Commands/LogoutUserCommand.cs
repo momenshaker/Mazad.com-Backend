@@ -5,18 +5,18 @@ namespace Mazad.Application.Auth.Commands;
 
 public record LogoutUserCommand() : IRequest;
 
-public class LogoutUserCommandHandler : IRequestHandler<LogoutUserCommand>
+public class LogoutUserCommandHandler(IAuthService authService) : IRequestHandler<LogoutUserCommand>
 {
-    private readonly IAuthService _authService;
-
-    public LogoutUserCommandHandler(IAuthService authService)
-    {
-        _authService = authService;
-    }
+    private readonly IAuthService _authService = authService;
 
     public async Task<Unit> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
     {
         await _authService.LogoutAsync(cancellationToken);
         return Unit.Value;
+    }
+
+    Task IRequestHandler<LogoutUserCommand>.Handle(LogoutUserCommand request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

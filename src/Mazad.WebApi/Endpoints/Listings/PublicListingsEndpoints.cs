@@ -3,6 +3,7 @@ using Mazad.Application.Bids.Commands;
 using Mazad.Application.Bids.Queries.GetListingBids;
 using Mazad.Application.Listings.Queries.GetById;
 using Mazad.Application.Listings.Queries.GetPublicListings;
+using Mazad.Domain.Enums;
 using Mazad.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +30,8 @@ public static class PublicListingsEndpoints
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20) =>
         {
-            var listingType = Enum.TryParse<Mazad.Domain.Enums.ListingType>(type, true, out var parsedType) ? parsedType : null;
-            var listingStatus = Enum.TryParse<Mazad.Domain.Enums.ListingStatus>(status, true, out var parsedStatus) ? parsedStatus : null;
+            ListingType? listingType = Enum.TryParse<Mazad.Domain.Enums.ListingType>(type, true, out var parsedType) ? parsedType : null;
+            ListingStatus? listingStatus = Enum.TryParse<Mazad.Domain.Enums.ListingStatus>(status, true, out var parsedStatus) ? parsedStatus : null;
 
             var result = await mediator.Send(new GetPublicListingsQuery(
                 q,
