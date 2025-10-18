@@ -1,5 +1,6 @@
 using Mazad.Application.DependencyInjection;
 using Mazad.Infrastructure.DependencyInjection;
+using Mazad.WebApi.Endpoints.Accounts;
 using Mazad.WebApi.Endpoints.Categories;
 using Mazad.WebApi.Endpoints.Listings;
 
@@ -43,5 +44,6 @@ app.MapSellerListingsEndpoints();
 app.MapAdminListingsEndpoints();
 app.MapPublicCategoriesEndpoints();
 app.MapAdminCategoriesEndpoints();
+app.MapAccountEndpoints();
 
 app.Run();

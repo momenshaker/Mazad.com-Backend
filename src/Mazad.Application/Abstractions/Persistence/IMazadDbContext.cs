@@ -1,6 +1,7 @@
 using Mazad.Domain.Entities.Bids;
 using Mazad.Domain.Entities.Catalog;
 using Mazad.Domain.Entities.Cms;
+using Mazad.Domain.Entities.Identity;
 using Mazad.Domain.Entities.Listings;
 using Mazad.Domain.Entities.Orders;
 using Mazad.Domain.Entities.Taxonomy;
@@ -25,6 +26,7 @@ public interface IMazadDbContext
     DbSet<Page> Pages { get; }
     DbSet<Menu> Menus { get; }
     DbSet<MediaAsset> MediaAssets { get; }
+    DbSet<UserProfile> UserProfiles { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
