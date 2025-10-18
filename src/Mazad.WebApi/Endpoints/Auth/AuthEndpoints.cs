@@ -1,6 +1,9 @@
 using System;
 using System.Security.Claims;
+using Mazad.Application.Accounts.Commands;
+using Mazad.Application.Accounts.Queries;
 using Mazad.Application.Auth.Commands;
+using Mazad.Application.Common.Models;
 using Mazad.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +17,7 @@ public static class AuthEndpoints
     {
         var group = routes.MapGroup("/api/v1/auth");
 
-        group.MapPost("/signup", async ([FromServices] IMediator mediator, [FromBody] SignupRequest request) =>
+        group.MapPost("/register", async ([FromServices] IMediator mediator, [FromBody] RegisterRequest request) =>
         {
             var result = await mediator.Send(new RegisterUserCommand(request.Email, request.Password, request.FullName));
             if (!result.Succeeded)
@@ -22,7 +25,7 @@ public static class AuthEndpoints
                 return Results.BadRequest(new { result.Errors });
             }
 
-            return Results.Created($"/api/v1/accounts/{result.UserId}", new { result.UserId, result.Email });
+            return Results.Created($"/api/v1/auth/profile", new { result.UserId, result.Email });
         }).AllowAnonymous();
 
         group.MapPost("/login", async ([FromServices] IMediator mediator, [FromBody] LoginRequest request) =>
@@ -41,6 +44,17 @@ public static class AuthEndpoints
             return Results.Json(result, statusCode: StatusCodes.Status401Unauthorized);
         }).AllowAnonymous();
 
+        group.MapPost("/refresh", ([FromBody] RefreshTokenRequest request) =>
+        {
+            return Results.StatusCode(StatusCodes.Status501NotImplemented);
+        }).AllowAnonymous();
+
+        group.MapPost("/logout", async ([FromServices] IMediator mediator) =>
+        {
+            await mediator.Send(new LogoutUserCommand());
+            return Results.NoContent();
+        }).RequireAuthorization("Scope:mazad.api");
+
         group.MapPost("/forgot-password", async ([FromServices] IMediator mediator, [FromBody] ForgotPasswordRequest request) =>
         {
             var result = await mediator.Send(new ForgotPasswordCommand(request.Email));
@@ -58,7 +72,42 @@ public static class AuthEndpoints
             return Results.Ok(result);
         }).AllowAnonymous();
 
-        group.MapPost("/set-password", async ([FromServices] IMediator mediator, ClaimsPrincipal user, [FromBody] SetPasswordRequest request) =>
+        group.MapGet("/profile", async ([FromServices] IMediator mediator, ClaimsPrincipal user) =>
+        {
+            var userId = user.GetUserId();
+            if (userId == Guid.Empty)
+            {
+                return Results.Unauthorized();
+            }
+
+            var result = await mediator.Send(new GetCurrentAccountQuery(userId));
+            return Results.Ok(result);
+        }).RequireAuthorization("Scope:mazad.api");
+
+        group.MapPut("/profile", async ([FromServices] IMediator mediator, ClaimsPrincipal user, [FromBody] UpdateProfileRequest request) =>
+        {
+            var userId = user.GetUserId();
+            if (userId == Guid.Empty)
+            {
+                return Results.Unauthorized();
+            }
+
+            var profile = request.Profile is null
+                ? null
+                : new UpdateAccountProfileDto(
+                    request.Profile.AvatarUrl,
+                    request.Profile.Address,
+                    request.Profile.City,
+                    request.Profile.Country,
+                    request.Profile.Language,
+                    request.Profile.Timezone);
+
+            var command = new UpdateAccountCommand(userId, request.FullName, request.PhoneNumber, profile);
+            var result = await mediator.Send(command);
+            return Results.Ok(result);
+        }).RequireAuthorization("Scope:mazad.api");
+
+        group.MapPut("/profile/password", async ([FromServices] IMediator mediator, ClaimsPrincipal user, [FromBody] UpdatePasswordRequest request) =>
         {
             var userId = user.GetUserId();
             if (userId == Guid.Empty)
@@ -74,6 +123,12 @@ public static class AuthEndpoints
 
             return Results.Ok(result);
         }).RequireAuthorization("Scope:mazad.api");
+
+        group.MapPost("/verify-email", () => Results.StatusCode(StatusCodes.Status501NotImplemented))
+            .RequireAuthorization("Scope:mazad.api");
+
+        group.MapPost("/verify-phone", () => Results.StatusCode(StatusCodes.Status501NotImplemented))
+            .RequireAuthorization("Scope:mazad.api");
 
         group.MapPost("/mfa/enable", async ([FromServices] IMediator mediator, ClaimsPrincipal user, [FromBody] EnableMfaRequest request) =>
         {
@@ -95,15 +150,21 @@ public static class AuthEndpoints
         return group;
     }
 
-    public record SignupRequest(string Email, string Password, string? FullName);
+    public record RegisterRequest(string Email, string Password, string? FullName);
 
     public record LoginRequest(string Email, string Password, bool RememberMe);
+
+    public record RefreshTokenRequest(string RefreshToken);
 
     public record ForgotPasswordRequest(string Email);
 
     public record ResetPasswordRequest(string Email, string Token, string NewPassword);
 
-    public record SetPasswordRequest(string NewPassword, string? CurrentPassword);
+    public record UpdateProfileRequest(string? FullName, string? PhoneNumber, UpdateProfileDetailsRequest? Profile);
+
+    public record UpdateProfileDetailsRequest(string? AvatarUrl, string? Address, string? City, string? Country, string? Language, string? Timezone);
+
+    public record UpdatePasswordRequest(string NewPassword, string? CurrentPassword);
 
     public record EnableMfaRequest(string? Code);
 }

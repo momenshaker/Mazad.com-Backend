@@ -1,9 +1,8 @@
 using System.Security.Claims;
 using Mazad.Application.Bids.Commands;
+using Mazad.Application.Bids.Queries.GetListingBids;
 using Mazad.Application.Listings.Queries.GetById;
 using Mazad.Application.Listings.Queries.GetPublicListings;
-using Mazad.Application.Watchlists.Commands;
-using Mazad.Application.Watchlists.Queries;
 using Mazad.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +15,55 @@ public static class PublicListingsEndpoints
     {
         var group = routes.MapGroup("/api/v1/listings");
 
-        //group.MapGet("/", async ([FromServices] IMediator mediator, [FromQuery] string? q, [FromQuery] Guid? categoryId, [FromQuery] string? type, [FromQuery] string? sort, [FromQuery] int page = 1, [FromQuery] int pageSize = 20) =>
-        //{
-        //    var listingType = Enum.TryParse<Mazad.Domain.Enums.ListingType>(type, true, out var parsed) ? parsed : null;
-        //    var result = await mediator.Send(new GetPublicListingsQuery(q, categoryId, listingType, sort, page, pageSize));
-        //    return Results.Ok(result);
-        //});
+        group.MapGet("/", async (
+            [FromServices] IMediator mediator,
+            [FromQuery] string? q,
+            [FromQuery] Guid? categoryId,
+            [FromQuery] string? type,
+            [FromQuery] string? status,
+            [FromQuery] Guid? sellerId,
+            [FromQuery] decimal? priceMin,
+            [FromQuery] decimal? priceMax,
+            [FromQuery] bool? endingSoon,
+            [FromQuery] string? sort,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20) =>
+        {
+            var listingType = Enum.TryParse<Mazad.Domain.Enums.ListingType>(type, true, out var parsedType) ? parsedType : null;
+            var listingStatus = Enum.TryParse<Mazad.Domain.Enums.ListingStatus>(status, true, out var parsedStatus) ? parsedStatus : null;
+
+            var result = await mediator.Send(new GetPublicListingsQuery(
+                q,
+                categoryId,
+                listingType,
+                listingStatus,
+                sellerId,
+                priceMin,
+                priceMax,
+                endingSoon ?? false,
+                sort,
+                page,
+                pageSize));
+
+            return Results.Ok(result);
+        });
 
         group.MapGet("/{id:guid}", async ([FromServices] IMediator mediator, Guid id) =>
         {
             var result = await mediator.Send(new GetListingByIdQuery(id));
+            return Results.Ok(result);
+        });
+
+        group.MapGet("/{id:guid}/bids", async (
+            [FromServices] IMediator mediator,
+            ClaimsPrincipal user,
+            Guid id,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20) =>
+        {
+            var viewerId = user.GetUserId();
+            var isAdmin = user.HasScope("mazad.admin");
+            var result = await mediator.Send(new GetListingBidsQuery(id, viewerId, isAdmin, page, pageSize));
             return Results.Ok(result);
         });
 
@@ -34,27 +72,6 @@ public static class PublicListingsEndpoints
             var bidderId = user.GetUserId();
             var bidId = await mediator.Send(new PlaceBidCommand(id, bidderId, request.Amount));
             return Results.Created($"/api/v1/bids/{bidId}", new { id = bidId });
-        }).RequireAuthorization("Scope:mazad.bidder");
-
-        group.MapGet("/watchlist", async ([FromServices] IMediator mediator, ClaimsPrincipal user, [FromQuery] int page = 1, [FromQuery] int pageSize = 20) =>
-        {
-            var userId = user.GetUserId();
-            var result = await mediator.Send(new GetMyWatchlistQuery(userId, page, pageSize));
-            return Results.Ok(result);
-        }).RequireAuthorization("Scope:mazad.bidder");
-
-        group.MapPost("/{id:guid}/watch", async ([FromServices] IMediator mediator, ClaimsPrincipal user, Guid id) =>
-        {
-            var userId = user.GetUserId();
-            await mediator.Send(new AddToWatchlistCommand(userId, id));
-            return Results.NoContent();
-        }).RequireAuthorization("Scope:mazad.bidder");
-
-        group.MapDelete("/{id:guid}/watch", async ([FromServices] IMediator mediator, ClaimsPrincipal user, Guid id) =>
-        {
-            var userId = user.GetUserId();
-            await mediator.Send(new RemoveFromWatchlistCommand(userId, id));
-            return Results.NoContent();
         }).RequireAuthorization("Scope:mazad.bidder");
 
         return group;
