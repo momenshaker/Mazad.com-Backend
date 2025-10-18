@@ -33,9 +33,10 @@ public class GetPublicListingsQueryHandler : IRequestHandler<GetPublicListingsQu
 
     public async Task<PagedResult<ListingDto>> Handle(GetPublicListingsQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.Listings
-            .AsNoTracking()
-            .Include(l => l.Media);
+        IQueryable<Domain.Entities.Listings.Listing> query = _context.Listings
+            .AsNoTracking();
+
+        query = query.Include(l => l.Media);
 
         if (request.Status.HasValue)
         {
