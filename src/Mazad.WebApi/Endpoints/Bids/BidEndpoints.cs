@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Bids;
 
+/// <summary>
+/// Provides extension methods for bid-related endpoints.
+/// </summary>
 public static class BidEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for retrieving bidder activity and bid details.
+    /// </summary>
     public static RouteGroupBuilder MapBidEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/bids");

@@ -5,8 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Categories;
 
+/// <summary>
+/// Provides extension methods for category browsing and management endpoints.
+/// </summary>
 public static class CategoriesEndpoints
 {
+    /// <summary>
+    /// Maps public endpoints for retrieving category information.
+    /// </summary>
     public static RouteGroupBuilder MapPublicCategoriesEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/categories");
@@ -26,6 +32,9 @@ public static class CategoriesEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Maps administrative endpoints for creating and maintaining categories.
+    /// </summary>
     public static RouteGroupBuilder MapAdminCategoriesEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/admin/categories")
@@ -52,6 +61,12 @@ public static class CategoriesEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload for creating a category.
+    /// </summary>
     public record CreateCategoryRequest(Guid? ParentId, string Name, string? Slug, string? AttributesSchema);
+    /// <summary>
+    /// Request payload for updating an existing category.
+    /// </summary>
     public record UpdateCategoryRequest(string Name, string? Slug, string? AttributesSchema);
 }

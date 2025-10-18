@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Listings;
 
+/// <summary>
+/// Provides extension methods for admin listing moderation endpoints.
+/// </summary>
 public static class AdminListingsEndpoints
 {
+    /// <summary>
+    /// Maps endpoints that allow administrators to review and moderate listings.
+    /// </summary>
     public static RouteGroupBuilder MapAdminListingsEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/admin/listings")
@@ -43,6 +49,12 @@ public static class AdminListingsEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload for approving a listing with optional notes.
+    /// </summary>
     public record ApproveListingRequest(string? Notes);
+    /// <summary>
+    /// Request payload for rejecting a listing with a reason.
+    /// </summary>
     public record RejectListingRequest(string Reason);
 }

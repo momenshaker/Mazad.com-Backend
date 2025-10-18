@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Payments;
 
+/// <summary>
+/// Provides extension methods for mapping bidder payment endpoints.
+/// </summary>
 public static class PaymentEndpoints
 {
+    /// <summary>
+    /// Maps payment endpoints for managing methods and processing transactions.
+    /// </summary>
     public static RouteGroupBuilder MapPaymentEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/payments")
@@ -54,19 +60,43 @@ public static class PaymentEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Response payload describing a stored payment method.
+    /// </summary>
     public record PaymentMethodResponse(Guid MethodId, string Brand, string MaskedPan, bool IsDefault, DateTimeOffset Expiry);
 
+    /// <summary>
+    /// Response payload that wraps a collection of payment methods.
+    /// </summary>
     public record PaymentMethodsResponse(IEnumerable<PaymentMethodResponse> Methods);
 
+    /// <summary>
+    /// Request payload for creating a new payment method.
+    /// </summary>
     public record CreatePaymentMethodRequest(string Token, string Brand, string MaskedPan, bool IsDefault = false);
 
+    /// <summary>
+    /// Request payload used to initiate a checkout session.
+    /// </summary>
     public record CheckoutRequest(Guid ListingId, Guid? PaymentMethodId, decimal Amount);
 
+    /// <summary>
+    /// Response payload describing an initiated checkout session.
+    /// </summary>
     public record CheckoutSessionResponse(Guid SessionId, Guid ListingId, decimal Amount, string Status, string RedirectUrl);
 
+    /// <summary>
+    /// Request payload sent to confirm a payment transaction.
+    /// </summary>
     public record ConfirmPaymentRequest(Guid TransactionId, string Status);
 
+    /// <summary>
+    /// Response payload returned after confirming a payment.
+    /// </summary>
     public record PaymentConfirmationResponse(Guid TransactionId, string Status, DateTimeOffset ProcessedAtUtc);
 
+    /// <summary>
+    /// Response payload describing a historical payment transaction.
+    /// </summary>
     public record PaymentTransactionResponse(Guid TransactionId, string Type, decimal Amount, string Status, DateTimeOffset UpdatedAtUtc);
 }

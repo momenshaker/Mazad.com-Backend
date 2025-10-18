@@ -11,8 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Auth;
 
+/// <summary>
+/// Provides extension methods for authentication and account management endpoints.
+/// </summary>
 public static class AuthEndpoints
 {
+    /// <summary>
+    /// Maps authentication, authorization, and account profile endpoints.
+    /// </summary>
     public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/auth");
@@ -150,21 +156,48 @@ public static class AuthEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload used when registering a new user account.
+    /// </summary>
     public record RegisterRequest(string Email, string Password, string? FullName);
 
+    /// <summary>
+    /// Request payload for authenticating an existing user.
+    /// </summary>
     public record LoginRequest(string Email, string Password, bool RememberMe);
 
+    /// <summary>
+    /// Request payload containing a refresh token to exchange for new credentials.
+    /// </summary>
     public record RefreshTokenRequest(string RefreshToken);
 
+    /// <summary>
+    /// Request payload initiating a password reset flow.
+    /// </summary>
     public record ForgotPasswordRequest(string Email);
 
+    /// <summary>
+    /// Request payload carrying the data necessary to reset a password.
+    /// </summary>
     public record ResetPasswordRequest(string Email, string Token, string NewPassword);
 
+    /// <summary>
+    /// Request payload used to update general account profile information.
+    /// </summary>
     public record UpdateProfileRequest(string? FullName, string? PhoneNumber, UpdateProfileDetailsRequest? Profile);
 
+    /// <summary>
+    /// Request payload describing detailed profile settings.
+    /// </summary>
     public record UpdateProfileDetailsRequest(string? AvatarUrl, string? Address, string? City, string? Country, string? Language, string? Timezone);
 
+    /// <summary>
+    /// Request payload for updating an account password.
+    /// </summary>
     public record UpdatePasswordRequest(string NewPassword, string? CurrentPassword);
 
+    /// <summary>
+    /// Request payload containing verification data to enable multi-factor authentication.
+    /// </summary>
     public record EnableMfaRequest(string? Code);
 }

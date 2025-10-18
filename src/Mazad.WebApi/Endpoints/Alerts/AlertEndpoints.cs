@@ -3,8 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Alerts;
 
+/// <summary>
+/// Provides extension methods for bidder alert subscription endpoints.
+/// </summary>
 public static class AlertEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for managing saved search alerts.
+    /// </summary>
     public static RouteGroupBuilder MapAlertEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/alerts")
@@ -24,9 +30,18 @@ public static class AlertEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload describing the alert criteria a bidder wants to follow.
+    /// </summary>
     public record AlertSubscriptionRequest(string? Keyword, Guid? CategoryId, Guid? BrandId);
 
+    /// <summary>
+    /// Response payload returned after creating an alert subscription.
+    /// </summary>
     public record AlertSubscriptionResponse(Guid AlertId, string? Keyword, Guid? CategoryId, Guid? BrandId, DateTimeOffset CreatedAtUtc);
 
+    /// <summary>
+    /// Response payload returned after deleting an alert subscription.
+    /// </summary>
     public record AlertDeletedResponse(Guid AlertId, DateTimeOffset DeletedAtUtc);
 }

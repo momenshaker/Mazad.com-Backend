@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Watchlists;
 
+/// <summary>
+/// Provides extension methods for bidder watchlist endpoints.
+/// </summary>
 public static class WatchlistEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for managing the authenticated user's watchlist.
+    /// </summary>
     public static RouteGroupBuilder MapWatchlistEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/watchlist")

@@ -9,8 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Brands;
 
+/// <summary>
+/// Provides extension methods for vehicle brand and model endpoints.
+/// </summary>
 public static class BrandEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for managing vehicle brands and models.
+    /// </summary>
     public static RouteGroupBuilder MapBrandEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/brands");
@@ -96,8 +102,20 @@ public static class BrandEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload for creating a vehicle brand.
+    /// </summary>
     public record CreateVehicleBrandRequest(string Name, string? Slug);
+    /// <summary>
+    /// Request payload for updating a vehicle brand.
+    /// </summary>
     public record UpdateVehicleBrandRequest(string Name, string? Slug);
+    /// <summary>
+    /// Request payload for creating a vehicle model.
+    /// </summary>
     public record CreateVehicleModelRequest(string Name, string? Slug);
+    /// <summary>
+    /// Request payload for updating a vehicle model.
+    /// </summary>
     public record UpdateVehicleModelRequest(string Name, string? Slug);
 }

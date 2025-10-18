@@ -8,8 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mazad.WebApi.Endpoints.Attributes;
 
+/// <summary>
+/// Provides extension methods for listing attribute definition endpoints.
+/// </summary>
 public static class AttributeEndpoints
 {
+    /// <summary>
+    /// Maps endpoints for retrieving and managing attribute definitions.
+    /// </summary>
     public static RouteGroupBuilder MapAttributeEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/v1/attributes");
@@ -56,6 +62,12 @@ public static class AttributeEndpoints
         return group;
     }
 
+    /// <summary>
+    /// Request payload for creating a new attribute definition.
+    /// </summary>
     public record UpsertAttributeDefinitionRequest(Guid CategoryId, string Key, string DisplayName, string DataType, string? OptionsJson);
+    /// <summary>
+    /// Request payload for updating an existing attribute definition.
+    /// </summary>
     public record UpdateAttributeDefinitionRequest(string DisplayName, string DataType, string? OptionsJson);
 }
