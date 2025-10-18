@@ -1,13 +1,26 @@
 using Mazad.Application.DependencyInjection;
 using Mazad.Infrastructure.DependencyInjection;
+using Mazad.WebApi.Endpoints.Admin;
+using Mazad.WebApi.Endpoints.Alerts;
+using Mazad.WebApi.Endpoints.Auctions;
 using Mazad.WebApi.Endpoints.Auth;
 using Mazad.WebApi.Endpoints.Bids;
 using Mazad.WebApi.Endpoints.Categories;
+using Mazad.WebApi.Endpoints.Cms;
 using Mazad.WebApi.Endpoints.Attributes;
 using Mazad.WebApi.Endpoints.Brands;
 using Mazad.WebApi.Endpoints.Listings;
+using Mazad.WebApi.Endpoints.Notifications;
+using Mazad.WebApi.Endpoints.Orders;
+using Mazad.WebApi.Endpoints.Payments;
+using Mazad.WebApi.Endpoints.Reviews;
+using Mazad.WebApi.Endpoints.Search;
+using Mazad.WebApi.Endpoints.Sellers;
+using Mazad.WebApi.Endpoints.Shipping;
 using Mazad.WebApi.Endpoints.Users;
 using Mazad.WebApi.Endpoints.Watchlists;
+using Mazad.WebApi.Endpoints.Disputes;
+using Mazad.WebApi.Endpoints.Fees;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,5 +70,18 @@ app.MapBidEndpoints();
 app.MapWatchlistEndpoints();
 app.MapUserEndpoints();
 app.MapRoleEndpoints();
+app.MapAuctionEndpoints();
+app.MapAlertEndpoints();
+app.MapSellerEndpoints();
+app.MapPaymentEndpoints();
+app.MapFeeEndpoints();
+app.MapOrderEndpoints();
+app.MapShippingEndpoints();
+app.MapDisputeEndpoints();
+app.MapReviewEndpoints();
+app.MapNotificationEndpoints();
+app.MapSearchEndpoints();
+app.MapCmsEndpoints();
+app.MapAdminEndpoints();
 
 app.Run();
